@@ -48,6 +48,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = "user.User"
+
 # Application definition
 MY_APPS = ["user", "address", "cart", "products", "orders"]
 
