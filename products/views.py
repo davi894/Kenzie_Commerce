@@ -1,8 +1,6 @@
-from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import Product
 from .serializers import ProductSerializer
-from django.shortcuts import get_object_or_404
 
 
 class ProductsView(ListCreateAPIView):
@@ -16,15 +14,24 @@ class ProductsDetailView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = "product_reference"
 
     def get_object(self) -> Product:
-
         product = self.kwargs["product_reference"]
+        print(product, "_" * 100)
 
-        product_id = Product.objects.get(pk=product)
-        product_name = Product.objects.get(name=product)
-        product_category = Product.objects.get(category=product)
+        my_list = [
+            "Celulares",
+            "Computadores",
+            "Perifericos",
+            "Eletronicos",
+            "eletro",
+        ]
 
-        # if len(product_name) > 0:
-        return product_name
+        if product in my_list:
+            product_obj = Product.objects.get(category=product)
+            return product_obj
 
-        # else:
-        #     return product_id
+        if isinstance(product, int):
+            product_id = Product.objects.get(pk=product)
+            return product_id
+        else:
+            product_name = Product.objects.get(name=product)
+            return product_name
