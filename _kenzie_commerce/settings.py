@@ -48,22 +48,21 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = "user.User"
+
 # Application definition
-MY_APPS = ["user", "address","cart","products","orders"]
+MY_APPS = ["user", "address", "cart", "products", "orders"]
 
-THIRD_PARTY_APPS = [
-    "rest_framework",
-    "rest_framework_simplejwt",
-    "drf_spectacular"
-]
+THIRD_PARTY_APPS = ["rest_framework", "rest_framework_simplejwt", "drf_spectacular"]
 
-DJANGO_APPS = [  
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",]
+    "django.contrib.staticfiles",
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 
@@ -143,12 +142,13 @@ USE_TZ = True
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    'SIGNING_KEY': SECRET_KEY
 }
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 2,
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 
