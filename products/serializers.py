@@ -4,6 +4,12 @@ from .models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
+
+    user = serializers.SerializerMethodField()
+
+    def get_user(self, dict):
+        return {"email": dict.user.email, "username": dict.user.username}
+
     class Meta:
         model = Product
 
