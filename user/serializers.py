@@ -16,14 +16,17 @@ class CustomJWTSerializer(TokenObtainPairSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
-
         if validated_data["employee"] or validated_data["costumer"]:
             return User.objects.create_user(**validated_data)
         elif not validated_data["employee"]:
             return User.objects.create_superuser(**validated_data)
 
-    def update(self, instance: User, validated_data: dict) -> User:
-        ...
+    def update(self, instance, validated_data):
+
+        setattr(instance, "employee", validated_data["employee"])
+        instance.save()
+
+        return instance
 
     class Meta:
         model = User
