@@ -1,11 +1,18 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
+from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 from .models import Address
 
 
 class AddressSerializer(serializers.ModelSerializer):
-    def create(self, validated_data):
-        ...
+
+    user = serializers.SerializerMethodField()
+
+    def get_user(self, dict):
+        return {
+            "email": dict.user.email,
+            "username": dict.user.username,
+            "id": dict.user.id,
+        }
 
     class Meta:
 
@@ -18,7 +25,26 @@ class AddressSerializer(serializers.ModelSerializer):
             "number",
             "city",
             "state",
-            "user_id",
+            "user",
         ]
 
         depth = 1
+
+        extra_kwargs = {
+            "zip_code": {
+                "validators": [
+                    UniqueValidator(
+                        queryset=Address.objects.all(),
+                        message="This field must be unique.",
+                    )
+                ]
+            },
+            "number": {
+                "validators": [
+                    UniqueValidator(
+                        queryset=Address.objects.all(),
+                        message="This field must be unique.",
+                    )
+                ]
+            },
+        }

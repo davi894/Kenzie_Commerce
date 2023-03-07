@@ -8,7 +8,11 @@ class ProductSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
 
     def get_user(self, dict):
-        return {"email": dict.user.email, "username": dict.user.username}
+        return {
+            "email": dict.user.email,
+            "username": dict.user.username,
+            "id": dict.user.id,
+        }
 
     class Meta:
         model = Product
@@ -24,3 +28,4 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
         depth = 1
+       
