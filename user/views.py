@@ -1,4 +1,4 @@
-from rest_framework.generics import RetrieveUpdateAPIView,CreateAPIView 
+from rest_framework.generics import RetrieveUpdateAPIView, CreateAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import UserSerializer, CustomJWTSerializer

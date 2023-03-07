@@ -14,7 +14,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "stock",
             "description",
-            "user_id",
+            "user",
         ]
 
         depth = 1

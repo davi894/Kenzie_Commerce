@@ -12,6 +12,12 @@ class ProductsView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def perform_create(self, serializer):
+        import ipdb
+
+        ipdb.set_trace()
+        serializer.save(user=self.request.user)
+
 
 class ProductByCategoryView(ListAPIView):
     serializer_class = ProductSerializer
