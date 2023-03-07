@@ -4,9 +4,6 @@ from .models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    def create(self, validated_data):
-        ...
-
     class Meta:
         model = Product
 

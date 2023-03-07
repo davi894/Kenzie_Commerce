@@ -1,3 +1,4 @@
+
 """_kenzie_commerce URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -18,5 +19,6 @@ from django.contrib import admin
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("user.urls"))
+    path("api/", include("user.urls")),
+    path("api/", include("products.urls")),
 ]
