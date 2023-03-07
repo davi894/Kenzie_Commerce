@@ -4,9 +4,6 @@ from .models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    # def create(self, validated_data):
-    #     ...
-
     class Meta:
         model = Product
 
@@ -17,7 +14,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "stock",
             "description",
-            # "user_id",
+            "user_id",
         ]
 
         depth = 1
