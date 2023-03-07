@@ -142,6 +142,7 @@ USE_TZ = True
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    'SIGNING_KEY': SECRET_KEY
 }
 
 REST_FRAMEWORK = {
