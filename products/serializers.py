@@ -5,15 +5,13 @@ from .models import Product
 class ProductSerializer(serializers.ModelSerializer):
 
     user = serializers.SerializerMethodField()
-    
+
     def update(self, instance, validated_data):
         return ...
 
     def get_user(self, dict):
         return {
             "email": dict.user.email,
-            "username": dict.user.username,
-            "id": dict.user.id,
         }
 
     def update(self, instance: Product, validated_data: dict) -> Product:

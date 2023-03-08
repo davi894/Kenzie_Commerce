@@ -1,4 +1,4 @@
-from rest_framework.generics import RetrieveUpdateAPIView, CreateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, ListCreateAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import UserSerializer, CustomJWTSerializer
@@ -10,7 +10,7 @@ class LoginJWTView(TokenObtainPairView):
     serializer_class = CustomJWTSerializer
 
 
-class UserViewGenerics(CreateAPIView):
+class UserViewGenerics(ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
