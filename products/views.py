@@ -3,24 +3,13 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
 )
-<<<<<<< HEAD
-from rest_framework.views import status
-from rest_framework_simplejwt.authentication import JWTAuthentication
-=======
->>>>>>> 7703d5906333721bd76046862895b54325ed1760
 from .models import Product
 from user.models import User
 from .serializers import ProductSerializer
 from django.shortcuts import get_object_or_404
-<<<<<<< HEAD
-from rest_framework.response import Response
-from .permission import CreateProductPermission
-from user.models import User
-=======
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .permission import CreateProductPermission
->>>>>>> 7703d5906333721bd76046862895b54325ed1760
 
 
 class ProductsView(ListCreateAPIView):
