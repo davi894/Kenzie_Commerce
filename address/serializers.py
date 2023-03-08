@@ -29,22 +29,3 @@ class AddressSerializer(serializers.ModelSerializer):
         ]
 
         depth = 1
-
-        extra_kwargs = {
-            "zip_code": {
-                "validators": [
-                    UniqueValidator(
-                        queryset=Address.objects.all(),
-                        message="This field must be unique.",
-                    )
-                ]
-            },
-            "number": {
-                "validators": [
-                    UniqueValidator(
-                        queryset=Address.objects.all(),
-                        message="This field must be unique.",
-                    )
-                ]
-            },
-        }
