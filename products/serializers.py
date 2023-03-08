@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 from .models import Product
 
 
@@ -9,6 +8,14 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_user(self, dict):
         return {"email": dict.user.email, "username": dict.user.username}
+
+    def update(self, instance: Product, validated_data: dict) -> Product:
+
+        instance.stock = validated_data.get("stock", instance.stock)
+
+        instance.save()
+
+        return instance
 
     class Meta:
         model = Product
