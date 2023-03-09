@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from products.permissions import CreateProductPermission
 from .permissions import IsAuthenticatedPermission
@@ -9,6 +9,7 @@ from products.models import Product
 from address.models import Address
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
+from products.permissions import CreateProductPermission
 import ipdb
 
 
@@ -38,5 +39,15 @@ class ServiceUnavailable(APIException):
     default_code = "service_unavailable"
 
 
-class OrderViewDetailGenerics(CreateAPIView):
-    ...
+class OrderViewDetailGenerics(RetrieveUpdateAPIView):
+    queryset = Orders.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [CreateProductPermission]
+    serializer_class = OrdersSerializer
+
+    lookup_url_kwarg = "id"
+
+    def get_object(self):
+        order_id = self.kwargs["id"]
+        order = get_object_or_404(Orders, pk=order_id)
+        return order

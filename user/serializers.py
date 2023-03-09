@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
             return User.objects.create_superuser(**validated_data)
 
     def update(self, instance, validated_data):
-        
+
         setattr(instance, "employee", validated_data["employee"])
         instance.save()
 

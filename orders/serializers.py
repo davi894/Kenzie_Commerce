@@ -56,3 +56,11 @@ class OrdersSerializer(serializers.Serializer):
             "products": products.id,
             "quantity": orders_products.quantity,
         }
+
+    def update(self, instance, validated_data):
+
+        setattr(instance, "status", validated_data["status"])
+        instance.save()
+
+        ipdb.set_trace()
+        return instance
