@@ -4,48 +4,8 @@ from .models import Orders, StatusChoices, OrdersProducts
 from django.shortcuts import get_object_or_404
 from products.models import Product
 from address.models import Address
+
 import ipdb
-
-
-# class OrdersSerializer(serializers.ModelSerializer):
-
-#     status = serializers.ChoiceField(
-#         choices=StatusChoices.choices,
-#         default=StatusChoices.DEFAULT,
-#     )
-
-#     def create(self, validated_data):
-#         ipdb.set_trace()
-#         status = validated_data["status"]
-#         products = validated_data["products"]
-#         address = validated_data["address"]
-#         price = validated_data["products"].price
-#         quantity = validated_data["quantity"]
-
-#         OrdersProducts.objects.create(quantity=quantity)
-
-#         order = Orders.objects.create(status=status, price=price, address_id=address.id)
-
-#         # order.address.add(address)
-#         order.products.add(products)
-#         # order = Orders.objects.create(status=status)
-#         return order
-
-#     class Meta:
-#         model = Orders
-
-#         fields = [
-#             "id",
-#             "status",
-#             "ordered_at",
-#             "price",
-#             "address",
-#             "products",
-#         ]
-
-#         read_only = ["price", "address", "products"]
-#         extra_kwargs = {"price": {"required": False}}
-#         depth = 1
 
 
 class OrdersSerializer(serializers.Serializer):
@@ -83,8 +43,7 @@ class OrdersSerializer(serializers.Serializer):
             quantity=quantity, product=products, order=order
         )
 
-        stock_result = products.stock - 1
-
+        stock_result = products.stock - quantity
         setattr(products, "stock", stock_result)
         products.save()
 
@@ -92,7 +51,7 @@ class OrdersSerializer(serializers.Serializer):
             "id": order.id,
             "status": order.status,
             "ordered_at": order.ordered_at,
-            "price": order.price,
+            "price": order.price * quantity,
             "address": order.address,
             "products": products.id,
             "quantity": orders_products.quantity,

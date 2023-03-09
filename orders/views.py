@@ -7,6 +7,8 @@ from .serializers import OrdersSerializer
 from django.shortcuts import get_object_or_404
 from products.models import Product
 from address.models import Address
+from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 import ipdb
 
 
@@ -16,12 +18,24 @@ class OrderViewGenerics(ListCreateAPIView):
     permission_classes = [IsAuthenticatedPermission]
     serializer_class = OrdersSerializer
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer) -> Response:
 
         product = get_object_or_404(Product, id=self.request.data["products"])
+
+        qtidade_pedida = serializer.validated_data["quantity"]
+
+        if product.stock < qtidade_pedida:
+            raise ServiceUnavailable()
+
         address = get_object_or_404(Address, id=self.request.data["address"])
 
         serializer.save(address=address, products=product)
+
+
+class ServiceUnavailable(APIException):
+    status_code = 400
+    default_detail = "Estoque Insuficiente."
+    default_code = "service_unavailable"
 
 
 class OrderViewDetailGenerics(CreateAPIView):
