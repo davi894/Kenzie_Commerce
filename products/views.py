@@ -3,20 +3,20 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
 )
-from rest_framework.views import status
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Product
+from user.models import User
 from .serializers import ProductSerializer
 from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
-from .permission import CreateProductPermission
-from user.models import User
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .permissions import CreateProductPermission
 
 
 class ProductsView(ListCreateAPIView):
-    queryset = Product.objects.all()
     authentication_classes = [JWTAuthentication]
-    permission_classes = [CreateProductPermission]
+    permission_classes = [IsAuthenticatedOrReadOnly, CreateProductPermission]
+
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
     def perform_create(self, serializer):
@@ -29,23 +29,33 @@ class ProductByCategoryView(ListAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        category = self.kwargs["category"]
+        category = self.kwargs["product_category"]
         queryset = Product.objects.filter(category=category)
 
         return queryset
 
 
+class ProductByNameView(ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        name = self.kwargs["product_name"]
+        queryset = Product.objects.filter(name=name)
+
+        return queryset
+
+
 class ProductsDetailView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly, CreateProductPermission]
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    lookup_url_kwarg = "product_reference"
+
+    lookup_url_kwarg = "product_id"
 
     def get_object(self) -> Product:
-        product_reference = self.kwargs["product_reference"]
+        product_reference = self.kwargs["product_id"]
+        product = get_object_or_404(Product, pk=product_reference)
 
-        if isinstance(product_reference, int):
-            product = get_object_or_404(Product, pk=product_reference)
-            return product
-        else:
-            product = get_object_or_404(Product, name=product_reference)
-            return product
+        return product

@@ -10,8 +10,6 @@ class AddressSerializer(serializers.ModelSerializer):
     def get_user(self, dict):
         return {
             "email": dict.user.email,
-            "username": dict.user.username,
-            "id": dict.user.id,
         }
 
     class Meta:

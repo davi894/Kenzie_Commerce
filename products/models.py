@@ -7,7 +7,6 @@ class Product(models.Model):
     price = models.IntegerField()
     stock = models.IntegerField()
     description = models.TextField()
-    is_available = models.BooleanField(default=True)
 
     user = models.ForeignKey(
         "user.User", on_delete=models.CASCADE, related_name="products"
