@@ -63,4 +63,12 @@ class OrdersSerializer(serializers.Serializer):
         instance.save()
 
         ipdb.set_trace()
-        return instance
+        return {
+            "id": instance.id,
+            "status": instance.status,
+            "ordered_at": instance.ordered_at,
+            "price": instance.price * instance.order_products.quantity,
+            "address": instance.address,
+            "products": instance.products,
+            "quantity": instance.order_products.quantity,
+        }
