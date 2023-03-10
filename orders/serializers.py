@@ -1,9 +1,11 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 from .models import Orders, StatusChoices, OrdersProducts
 from django.shortcuts import get_object_or_404
 from products.models import Product
 from address.models import Address
+from django.core.mail import send_mail
+from django.conf import settings
+from user.models import User
 
 import ipdb
 
@@ -62,6 +64,19 @@ class OrdersSerializer(serializers.Serializer):
         orders_products = get_object_or_404(OrdersProducts, order=instance)
         setattr(instance, "status", validated_data["status"])
         instance.save()
+
+        user = User.objects.get(pk=instance.address.user_id)
+
+        ipdb.set_trace()
+
+        send_mail(
+            subject="Atualização de status de compra",
+            message=f"O status da sua compra foi atualizado para {validated_data['status']}",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+
         return {
             "id": instance.id,
             "status": instance.status,
