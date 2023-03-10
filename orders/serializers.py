@@ -58,17 +58,16 @@ class OrdersSerializer(serializers.Serializer):
         }
 
     def update(self, instance, validated_data):
-
+        product = get_object_or_404(Product, id=validated_data["products"])
+        orders_products = get_object_or_404(OrdersProducts, order=instance)
         setattr(instance, "status", validated_data["status"])
         instance.save()
-
-        ipdb.set_trace()
         return {
             "id": instance.id,
             "status": instance.status,
             "ordered_at": instance.ordered_at,
-            "price": instance.price * instance.order_products.quantity,
+            "price": instance.price * orders_products.quantity,
             "address": instance.address,
-            "products": instance.products,
-            "quantity": instance.order_products.quantity,
+            "products": product.id,
+            "quantity": orders_products.quantity,
         }

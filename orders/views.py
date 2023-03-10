@@ -35,7 +35,7 @@ class OrderViewGenerics(ListCreateAPIView):
 
 class ServiceUnavailable(APIException):
     status_code = 400
-    default_detail = "Estoque Insuficiente."
+    default_detail = "Insufficient stock."
     default_code = "service_unavailable"
 
 
@@ -44,10 +44,3 @@ class OrderViewDetailGenerics(RetrieveUpdateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [CreateProductPermission]
     serializer_class = OrdersSerializer
-
-    lookup_url_kwarg = "id"
-
-    def get_object(self):
-        order_id = self.kwargs["id"]
-        order = get_object_or_404(Orders, pk=order_id)
-        return order
