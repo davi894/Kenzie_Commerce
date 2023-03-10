@@ -35,7 +35,7 @@ class OrderViewGenerics(ListCreateAPIView):
 
 class ServiceUnavailable(APIException):
     status_code = 400
-    default_detail = "Estoque Insuficiente."
+    default_detail = "Insufficient stock."
     default_code = "service_unavailable"
 
 
@@ -45,4 +45,3 @@ class OrderViewDetailGenerics(RetrieveUpdateAPIView):
     permission_classes = [CreateProductPermission]
     serializer_class = OrdersSerializer
 
-        
