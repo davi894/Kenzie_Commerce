@@ -64,6 +64,8 @@ SECRET_KEY = "django-insecure-i5$7sx&=v1buwb(8-dfk#ja)%bzc+v)#ch&!4ogt2=-p&__v*t
 
 ALLOWED_HOSTS = ["web-production-8af6e.up.railway.app", "0.0.0.0"]
 
+AUTH_USER_MODEL = "user.User"
+
 # Application definition
 MY_APPS = ["user", "address", "cart", "products", "orders"]
 
@@ -157,6 +159,7 @@ USE_TZ = True
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "SIGNING_KEY": SECRET_KEY,
 }
 
 REST_FRAMEWORK = {
@@ -164,6 +167,13 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 2,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 
 # Static files (CSS, JavaScript, Images)
