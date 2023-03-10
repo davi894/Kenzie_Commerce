@@ -23,9 +23,9 @@ class OrderViewGenerics(ListCreateAPIView):
 
         product = get_object_or_404(Product, id=self.request.data["products"])
 
-        qtidade_pedida = serializer.validated_data["quantity"]
+        quantidade_pedida = serializer.validated_data["quantity"]
 
-        if product.stock < qtidade_pedida:
+        if product.stock < quantidade_pedida:
             raise ServiceUnavailable()
 
         address = get_object_or_404(Address, id=self.request.data["address"])
@@ -45,20 +45,4 @@ class OrderViewDetailGenerics(RetrieveUpdateAPIView):
     permission_classes = [CreateProductPermission]
     serializer_class = OrdersSerializer
 
-    # def partial_update(self, serializer, pk):
-
-    #     product = Product.objects.get(id=pk)
-
-    #     ipdb.set_trace()
-
-    #     return super().update(serializer, pk,)
-
-    def perform_update(self, serializer):
-
-        # order_id = self.kwargs["id"]
-        product_id = self.kwargs["pk"]
-
-        product = Product.objects.get(id=product_id)
-        # orders = Orders.objects.get(id=order_id)
-
-        serializer.save(products=product)
+        

@@ -3,5 +3,5 @@ from .views import OrderViewGenerics, OrderViewDetailGenerics
 
 urlpatterns = [
     path("orders/", OrderViewGenerics.as_view()),
-    path("orders/products/<int:pk>/", OrderViewDetailGenerics.as_view()),
+    path("orders/<int:id>/", OrderViewDetailGenerics.as_view()),
 ]

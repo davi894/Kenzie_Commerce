@@ -1,17 +1,9 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 from .models import Orders, StatusChoices, OrdersProducts
 from django.shortcuts import get_object_or_404
 from products.models import Product
 from address.models import Address
-
 import ipdb
-
-
-class ProductsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = "__all__"
 
 
 class OrdersSerializer(serializers.Serializer):
@@ -23,7 +15,7 @@ class OrdersSerializer(serializers.Serializer):
     )
     ordered_at = serializers.DateTimeField(read_only=True)
     price = serializers.IntegerField(read_only=True)
-    products = ProductsSerializer()
+    products = serializers.IntegerField()
     address = serializers.SerializerMethodField()
     quantity = serializers.IntegerField()
 
@@ -65,9 +57,22 @@ class OrdersSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
 
-        ipdb.set_trace()
+        product = get_object_or_404(Product, id=validated_data["products"])
 
+        orders_products = get_object_or_404(
+            OrdersProducts, order=instance
+        )
+        
         setattr(instance, "status", validated_data["status"])
+
         instance.save()
 
-        return instance
+        return {
+            "id": instance.id,
+            "status": instance.status,
+            "ordered_at": instance.ordered_at,
+            "price": instance.price * orders_products.quantity,
+            "address": instance.address,
+            "products": product.id,
+            "quantity": orders_products.quantity,
+        }
