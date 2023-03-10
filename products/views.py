@@ -9,7 +9,7 @@ from .serializers import ProductSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .permission import CreateProductPermission
+from .permissions import CreateProductPermission
 
 
 class ProductsView(ListCreateAPIView):
