@@ -8,6 +8,12 @@ from address.models import Address
 import ipdb
 
 
+class ProductsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"
+
+
 class OrdersSerializer(serializers.Serializer):
 
     id = serializers.IntegerField(read_only=True)
@@ -17,7 +23,7 @@ class OrdersSerializer(serializers.Serializer):
     )
     ordered_at = serializers.DateTimeField(read_only=True)
     price = serializers.IntegerField(read_only=True)
-    products = serializers.IntegerField()
+    products = ProductsSerializer()
     address = serializers.SerializerMethodField()
     quantity = serializers.IntegerField()
 
@@ -59,8 +65,9 @@ class OrdersSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
 
+        ipdb.set_trace()
+
         setattr(instance, "status", validated_data["status"])
         instance.save()
 
-        ipdb.set_trace()
         return instance

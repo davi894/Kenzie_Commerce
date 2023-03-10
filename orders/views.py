@@ -45,9 +45,20 @@ class OrderViewDetailGenerics(RetrieveUpdateAPIView):
     permission_classes = [CreateProductPermission]
     serializer_class = OrdersSerializer
 
-    lookup_url_kwarg = "id"
+    # def partial_update(self, serializer, pk):
 
-    def get_object(self):
-        order_id = self.kwargs["id"]
-        order = get_object_or_404(Orders, pk=order_id)
-        return order
+    #     product = Product.objects.get(id=pk)
+
+    #     ipdb.set_trace()
+
+    #     return super().update(serializer, pk,)
+
+    def perform_update(self, serializer):
+
+        # order_id = self.kwargs["id"]
+        product_id = self.kwargs["pk"]
+
+        product = Product.objects.get(id=product_id)
+        # orders = Orders.objects.get(id=order_id)
+
+        serializer.save(products=product)
