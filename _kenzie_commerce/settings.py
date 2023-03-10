@@ -24,6 +24,9 @@ dotenv.load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv("DEBUG", False)
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -39,13 +42,12 @@ DATABASES = {
     },
 }
 
-DATABASE_URL: os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL:
     production_db = dj_database_url.config(
-        default=DATABASE_URL, conn_max_age=500, ssl_require=True
-    )
-    DATABASES["default"].update(production_db)
+        default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+    DATABASES['default'].update(production_db)
     DEBUG = False
 
 if not DEBUG:
@@ -59,10 +61,8 @@ if not DEBUG:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-i5$7sx&=v1buwb(8-dfk#ja)%bzc+v)#ch&!4ogt2=-p&__v*t"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["web-production-8af6e.up.railway.app", "0.0.0.0"]
 
 # Application definition
 MY_APPS = ["user", "address", "cart", "products", "orders"]
