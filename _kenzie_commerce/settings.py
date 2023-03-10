@@ -13,6 +13,8 @@ from datetime import timedelta
 from pathlib import Path
 import dotenv
 import os
+from django.core.management.utils import get_random_secret_key
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 dotenv.load_dotenv()
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 DATABASES = {
     "default": {
@@ -37,6 +39,20 @@ DATABASES = {
     },
 }
 
+DATABASE_URL: os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    production_db = dj_database_url.config(
+        default=DATABASE_URL, conn_max_age=500, ssl_require=True
+    )
+    DATABASES["default"].update(production_db)
+    DEBUG = False
+
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -44,31 +60,29 @@ DATABASES = {
 SECRET_KEY = "django-insecure-i5$7sx&=v1buwb(8-dfk#ja)%bzc+v)#ch&!4ogt2=-p&__v*t"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", False)
 
 ALLOWED_HOSTS = []
 
 # Application definition
-MY_APPS = ["user", "address","cart","products","orders"]
+MY_APPS = ["user", "address", "cart", "products", "orders"]
 
-THIRD_PARTY_APPS = [
-    "rest_framework",
-    "rest_framework_simplejwt",
-    "drf_spectacular"
-]
+THIRD_PARTY_APPS = ["rest_framework", "rest_framework_simplejwt", "drf_spectacular"]
 
-DJANGO_APPS = [  
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",]
+    "django.contrib.staticfiles",
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -148,7 +162,7 @@ SIMPLE_JWT = {
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 2,
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 
