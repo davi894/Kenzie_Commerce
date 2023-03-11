@@ -9,7 +9,7 @@ class ProductSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         return ...
 
-    def get_user(self, dict):
+    def get_user(self, dict) -> dict:
         return {
             "email": dict.user.email,
         }
