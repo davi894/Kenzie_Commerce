@@ -23,7 +23,7 @@ class OrdersSerializer(serializers.Serializer):
     address = serializers.SerializerMethodField()
     quantity = serializers.IntegerField()
 
-    def get_address(self, dict):
+    def get_address(self, dict: Address) -> dict:
         return {
             "id": dict["address"].id,
             "street": dict["address"].street,
