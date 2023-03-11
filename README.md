@@ -2,7 +2,7 @@
 <p align="center">
   <img alt="Imagem ilustrativa e-commerce" src="https://cdn2.increase.com.br/increasecombr/2018/01/22135702/ecommerce.jpg" width="1200" height="450"/>
 </p>
-<h4>O prjeto final é desenvolvido ao final de cada módulo com intuito de aplicar o conhecimento adquirido durante o mesmo. Neste módulos tivemos nosso primeiro contato com python, juntamente com django e djando REST framework, utilizando banco de dados relacional.</h4>
+<h4>O prjeto final é desenvolvido ao final de cada módulo com intuito de aplicar o conhecimento adquirido durante o mesmo. Neste módulos tivemos nosso primeiro contato com python, juntamente com django e djando REST framework, utilizando banco de dados relacional para criação de API.</h4>
 
 
 <h2 align="center"><a target=blank href="http://127.0.0.1:8000/api/docs/swagger/">Siga as instruções e clique aqui para ver o projeto final!</a></h2>
