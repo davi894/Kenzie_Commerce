@@ -42,12 +42,13 @@ DATABASES = {
     },
 }
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
     production_db = dj_database_url.config(
-        default=DATABASE_URL, conn_max_age=500, ssl_require=True)
-    DATABASES['default'].update(production_db)
+        default=DATABASE_URL, conn_max_age=500, ssl_require=True
+    )
+    DATABASES["default"].update(production_db)
     DEBUG = False
 
 if not DEBUG:
@@ -61,8 +62,14 @@ if not DEBUG:
 # SECURITY WARNING: keep the secret key used in production secret!
 
 
+ALLOWED_HOSTS = []
 
-ALLOWED_HOSTS = ["web-production-8af6e.up.railway.app", "0.0.0.0"]
+RAILWAY_STATIC_URL = os.getenv("web-production-8af6e.up.railway.app")
+
+if RAILWAY_STATIC_URL:
+    # Configuramos o host permitindo que o nosso app Railway se conecte ao server do Django
+    ALLOWED_HOSTS += [RAILWAY_STATIC_URL, "0.0.0.0"]
+
 
 AUTH_USER_MODEL = "user.User"
 
