@@ -4,12 +4,12 @@ from .models import Product
 
 class ProductSerializer(serializers.ModelSerializer):
 
-    user = serializers.SerializerMethodField()
+    employee_email = serializers.SerializerMethodField()
 
     def update(self, instance, validated_data):
         return ...
 
-    def get_user(self, dict):
+    def get_employee_email(self, dict):
         return {
             "email": dict.user.email,
         }
@@ -32,8 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "stock",
             "description",
-            "user",
+            "employee_email",
         ]
 
         depth = 1
-       

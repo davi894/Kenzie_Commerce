@@ -1,6 +1,6 @@
-from rest_framework.generics import RetrieveUpdateAPIView, CreateAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .permissions import RegisterAddressPermission
+from rest_framework.generics import CreateAPIView
 from django.shortcuts import get_object_or_404
 from .serializers import AddressSerializer
 from user.models import User
