@@ -17,7 +17,7 @@ class OrdersSerializer(serializers.Serializer):
     address = serializers.SerializerMethodField()
     cart = serializers.SerializerMethodField()
 
-    def get_address(self, dict: Address) -> dict:
+    def get_address(self, dict):
         return {
             "id": dict["address"].id,
             "street": dict["address"].street,
