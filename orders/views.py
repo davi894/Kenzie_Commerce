@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from .serializers import OrdersSerializer
 from address.models import Address
 from .models import Orders
-import ipdb
 
 
 class OrderViewGenerics(ListCreateAPIView):

@@ -1,10 +1,9 @@
 from cart.models import Cart, ProductsInCart
 from .models import Orders, StatusChoices
+from django.core.mail import send_mail
 from rest_framework import serializers
 from django.conf import settings
 from products.models import Product
-from django.core.mail import send_mail
-import ipdb
 
 
 class OrdersSerializer(serializers.Serializer):
@@ -69,7 +68,7 @@ class OrdersSerializer(serializers.Serializer):
         )
 
         producst_in_cart = ProductsInCart.objects.filter(cart=instance.cart.id)
-        
+
         return {
             "id": instance.id,
             "status": instance.status,
@@ -77,40 +76,3 @@ class OrdersSerializer(serializers.Serializer):
             "ordered_at": instance.ordered_at,
             "cart": producst_in_cart.values(),
         }
-        # product = get_object_or_404(Product, id=validated_data["products"])
-        # orders_products = get_object_or_404(OrdersProducts, order=instance)
-        # setattr(instance, "status", validated_data["status"])
-        # instance.save()
-
-        # product = get_object_or_404(Product, id=validated_data["products"])
-
-        # orders_products = get_object_or_404(OrdersProducts, order=instance)
-
-        # setattr(instance, "status", validated_data["status"])
-
-        # instance.save()
-
-        # return {
-        #     "id": instance.id,
-        #     "status": instance.status,
-        #     "ordered_at": instance.ordered_at,
-        #     "price": instance.price * orders_products.quantity,
-        #     "address": instance.address,
-        #     "products": product.id,
-        #     "quantity": orders_products.quantity,
-        # }
-        ###################################################
-        # user = User.objects.get(pk=instance.address.user_id)
-
-        # ipdb.set_trace()
-
-        # return {
-        #     "id": instance.id,
-        #     "status": instance.status,
-        #     "ordered_at": instance.ordered_at,
-        #     "price": instance.price * orders_products.quantity,
-        #     "address": instance.address,
-        #     "products": product.id,
-        #     "quantity": orders_products.quantity,
-        # }
-        ...
