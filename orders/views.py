@@ -2,15 +2,11 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from products.permissions import CreateProductPermission
 from .permissions import IsAuthenticatedPermission
-from .models import Orders
-from .serializers import OrdersSerializer
 from django.shortcuts import get_object_or_404
-from products.models import Product
-from address.models import Address
 from rest_framework.response import Response
-from rest_framework.exceptions import APIException
-from products.permissions import CreateProductPermission
-import ipdb
+from .serializers import OrdersSerializer
+from address.models import Address
+from .models import Orders
 
 
 class OrderViewGenerics(ListCreateAPIView):
@@ -20,23 +16,9 @@ class OrderViewGenerics(ListCreateAPIView):
     serializer_class = OrdersSerializer
 
     def perform_create(self, serializer) -> Response:
-
-        product = get_object_or_404(Product, id=self.request.data["products"])
-
-        qtidade_pedida = serializer.validated_data["quantity"]
-
-        if product.stock < qtidade_pedida:
-            raise ServiceUnavailable()
-
         address = get_object_or_404(Address, id=self.request.data["address"])
 
-        serializer.save(address=address, products=product)
-
-
-class ServiceUnavailable(APIException):
-    status_code = 400
-    default_detail = "Insufficient stock."
-    default_code = "service_unavailable"
+        serializer.save(address=address)
 
 
 class OrderViewDetailGenerics(RetrieveUpdateAPIView):
@@ -44,3 +26,4 @@ class OrderViewDetailGenerics(RetrieveUpdateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [CreateProductPermission]
     serializer_class = OrdersSerializer
+    slug_url_kwarg = "uuid"

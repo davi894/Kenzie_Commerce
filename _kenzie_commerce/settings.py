@@ -59,7 +59,7 @@ if not DEBUG:
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-i5$7sx&=v1buwb(8-dfk#ja)%bzc+v)#ch&!4ogt2=-p&__v*t"
+
 
 
 ALLOWED_HOSTS = ["web-production-8af6e.up.railway.app", "0.0.0.0"]
@@ -166,6 +166,12 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 2,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Kenzie Commerce",
+    "DESCRIPTION": "Projeto final M5 grupo 32",
+    "VERSION": "0.0.1",
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

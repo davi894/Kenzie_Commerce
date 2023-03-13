@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 
 class StatusChoices(models.TextChoices):
@@ -8,6 +9,7 @@ class StatusChoices(models.TextChoices):
 
 
 class Orders(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     status = models.CharField(
         max_length=20,
         choices=StatusChoices.choices,
@@ -21,19 +23,6 @@ class Orders(models.Model):
         "address.Address", on_delete=models.CASCADE, related_name="address"
     )
 
-    products = models.ManyToManyField(
-        "products.Product",
-        through="OrdersProducts",
-        related_name="products_cart",
+    cart = models.ForeignKey(
+        "cart.Cart", on_delete=models.CASCADE, related_name="cart_orders"
     )
-
-
-class OrdersProducts(models.Model):
-    product = models.ForeignKey(
-        "products.Product", on_delete=models.CASCADE, related_name="products_order"
-    )
-    order = models.ForeignKey(
-        "orders.Orders", on_delete=models.CASCADE, related_name="order_products"
-    )
-
-    quantity = models.IntegerField()

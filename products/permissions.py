@@ -1,6 +1,4 @@
-from rest_framework.views import Request, View
 from rest_framework import permissions
-from .models import Product
 
 
 class CreateProductPermission(permissions.BasePermission):

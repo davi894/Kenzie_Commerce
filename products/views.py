@@ -1,15 +1,15 @@
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .permissions import CreateProductPermission
+from django.shortcuts import get_object_or_404
+from .serializers import ProductSerializer
 from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
 )
-from .models import Product
 from user.models import User
-from .serializers import ProductSerializer
-from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from .permissions import CreateProductPermission
+from .models import Product
 
 
 class ProductsView(ListCreateAPIView):

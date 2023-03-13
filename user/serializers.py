@@ -1,9 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.validators import UniqueValidator
-from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from .models import User
-import ipdb
 
 
 class CustomJWTSerializer(TokenObtainPairSerializer):

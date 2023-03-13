@@ -1,6 +1,5 @@
 from rest_framework.views import Request, View
 from rest_framework import permissions
-import ipdb
 
 
 class IsAuthenticatedPermission(permissions.BasePermission):

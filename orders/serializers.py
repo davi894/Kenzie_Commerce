@@ -1,27 +1,21 @@
-from rest_framework import serializers
-from .models import Orders, StatusChoices, OrdersProducts
-from django.shortcuts import get_object_or_404
-from products.models import Product
-from address.models import Address
+from cart.models import Cart, ProductsInCart
+from .models import Orders, StatusChoices
 from django.core.mail import send_mail
+from rest_framework import serializers
 from django.conf import settings
-from user.models import User
-
-import ipdb
+from products.models import Product
 
 
 class OrdersSerializer(serializers.Serializer):
 
-    id = serializers.IntegerField(read_only=True)
+    id = serializers.CharField(read_only=True)
     status = serializers.ChoiceField(
         choices=StatusChoices.choices,
         default=StatusChoices.DEFAULT,
     )
     ordered_at = serializers.DateTimeField(read_only=True)
-    price = serializers.IntegerField(read_only=True)
-    products = serializers.IntegerField()
     address = serializers.SerializerMethodField()
-    quantity = serializers.IntegerField()
+    cart = serializers.SerializerMethodField()
 
     def get_address(self, dict):
         return {
@@ -30,59 +24,55 @@ class OrdersSerializer(serializers.Serializer):
             "zip_code": dict["address"].zip_code,
             "state": dict["address"].state,
             "city": dict["address"].city,
+            "user_email": dict["address"].user.email,
         }
 
+    def get_cart(self, dict):
+        list_products = []
+
+        for products in dict["cart"]:
+            employee_product = Product.objects.get(id=products["product_id"])
+            products["employee_email"] = employee_product.user.email
+            list_products.append(products)
+
+        return list_products
+
     def create(self, validated_data):
-        status = validated_data["status"]
-        products = validated_data["products"]
+        user = validated_data["address"].user
         address = validated_data["address"]
-        price = validated_data["products"].price
-        quantity = validated_data["quantity"]
+        cart_user = Cart.objects.get(user=user)
+        producst_in_cart = ProductsInCart.objects.filter(cart=cart_user.id)
 
-        order = Orders.objects.create(status=status, price=price, address_id=address.id)
-
-        orders_products = OrdersProducts.objects.create(
-            quantity=quantity, product=products, order=order
+        order = Orders.objects.create(
+            cart=cart_user, price=cart_user.value, address=address
         )
-
-        stock_result = products.stock - quantity
-        setattr(products, "stock", stock_result)
-        products.save()
 
         return {
             "id": order.id,
             "status": order.status,
+            "address": address,
             "ordered_at": order.ordered_at,
-            "price": order.price * quantity,
-            "address": order.address,
-            "products": products.id,
-            "quantity": orders_products.quantity,
+            "cart": producst_in_cart.values(),
         }
 
     def update(self, instance, validated_data):
-        product = get_object_or_404(Product, id=validated_data["products"])
-        orders_products = get_object_or_404(OrdersProducts, order=instance)
+
         setattr(instance, "status", validated_data["status"])
         instance.save()
-
-        user = User.objects.get(pk=instance.address.user_id)
-
-        ipdb.set_trace()
-
         send_mail(
             subject="Atualização de status de compra",
             message=f"O status da sua compra foi atualizado para {validated_data['status']}",
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[user.email],
+            recipient_list=[instance.address.user.email],
             fail_silently=False,
         )
+
+        producst_in_cart = ProductsInCart.objects.filter(cart=instance.cart.id)
 
         return {
             "id": instance.id,
             "status": instance.status,
-            "ordered_at": instance.ordered_at,
-            "price": instance.price * orders_products.quantity,
             "address": instance.address,
-            "products": product.id,
-            "quantity": orders_products.quantity,
+            "ordered_at": instance.ordered_at,
+            "cart": producst_in_cart.values(),
         }
