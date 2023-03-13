@@ -6,7 +6,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
     user = serializers.SerializerMethodField()
 
-    def get_user(self, dict):
+    def get_user(self, dict: Address) -> dict:
         return {
             "email": dict.user.email,
         }
