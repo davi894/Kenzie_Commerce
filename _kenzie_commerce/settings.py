@@ -45,9 +45,7 @@ DATABASES = {
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    production_db = dj_database_url.config(
-        default=DATABASE_URL, conn_max_age=500, ssl_require=True
-    )
+    production_db = dj_database_url.config(default=DATABASE_URL)
     DATABASES["default"].update(production_db)
     DEBUG = False
 
@@ -64,11 +62,11 @@ if not DEBUG:
 
 ALLOWED_HOSTS = []
 
-RAILWAY_STATIC_URL = os.getenv("api-django-production.up.railway.app")
+RAILWAY_STATIC_URL = "api-django-production.up.railway.app"
 
 if RAILWAY_STATIC_URL:
     # Configuramos o host permitindo que o nosso app Railway se conecte ao server do Django
-    ALLOWED_HOSTS += [RAILWAY_STATIC_URL, "0.0.0.0"]
+    ALLOWED_HOSTS += [RAILWAY_STATIC_URL, "127.0.0.1"]
 
 
 AUTH_USER_MODEL = "user.User"
@@ -131,6 +129,7 @@ DATABASES = {
     }
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -192,9 +191,6 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-MEDIA_URL = "assets/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "assets")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
